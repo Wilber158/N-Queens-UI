@@ -1,6 +1,7 @@
 import random
 import math
 import time
+import eel
 
 def queenAttack(x_1, y_1, x_2, y_2):
     if x_1 == x_2:
@@ -67,7 +68,6 @@ def debug_simulated_Annealing(initial):
             print(f"Probability: {prob}")
             if(decision(prob)):
                 current = next
-        if currentH == 0: return current
         print(f"Current h: {currentH}")
     return current
 
@@ -104,11 +104,17 @@ def simulated_Annealing(initial):
 
     return current
 
+@eel.expose
+def eight_queens(n):
+    initial_state = initial_state(n)
+    goal_state = simulated_Annealing(initial_state)
+    return goal_state   
+
 
 def main():
    start = time.monotonic()
-   arr = initial_state(8)
-   arr = simulated_Annealing(arr)
+   arr = initial_state(15)
+   arr = debug_simulated_Annealing(arr)
    end = time.monotonic()
    print(f"Elapsed time: {end - start}")
    print(arr)

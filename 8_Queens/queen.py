@@ -24,7 +24,11 @@ def numQueensAttack(arr):
             if queenAttack(qR, qC, oR, oC):
                h = h + 1
     return h
-
+@eel.expose
+def isGoalState(arr):
+    if numQueensAttack(arr) == 0:
+        return True
+    return False
 
 def initial_state(n):
     arr = []
@@ -37,7 +41,7 @@ def getNext(arr):
     #makes a random move on a certain column given a state
     nextArr = arr.copy()
     n = len(arr)
-    nextC = random.randint(1, n)
+    nextC = random.randint(0, n-1)
     nextR = random.randint(0, n-1)
     nextArr[nextR] = nextC
     return nextArr
@@ -71,11 +75,11 @@ def debug_simulated_Annealing(initial):
         print(f"Current h: {currentH}")
     return current
 
-def simulated_Annealing(initial):
+def simulated_Annealing(initial, temp):
     t0, k, alpha = 10000, 0, 0.85
     tk = t0
     current = initial
-    for i in range(100000000):
+    for i in range(temp):
         #simulating annealing (temperature change) using Exponential multiplicative cooling
         tk = t0 * pow(alpha, k)
         k = k + 1
@@ -105,20 +109,10 @@ def simulated_Annealing(initial):
     return current
 
 @eel.expose
-def eight_queens(n):
-    initial_state = initial_state(n)
-    goal_state = simulated_Annealing(initial_state)
-    return goal_state   
+def eight_queens(n, temp):
+    state = initial_state(n)
+    goal_state = simulated_Annealing(state, temp)
+    return goal_state
+        
+    
 
-
-def main():
-   start = time.monotonic()
-   arr = initial_state(15)
-   arr = debug_simulated_Annealing(arr)
-   end = time.monotonic()
-   print(f"Elapsed time: {end - start}")
-   print(arr)
-   
-
-
-main()

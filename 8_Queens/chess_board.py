@@ -1,5 +1,4 @@
 import tkinter as tk
-import python-chess
 
 class ChessBoard:
     def __init__(self, root):

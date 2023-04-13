@@ -1,7 +1,9 @@
 import eel
+import queen
+
 
 def main():
     eel.init("web")
-    eel.start("home.html ")
+    eel.start("main.html")
 
 main()

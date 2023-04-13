@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="text/javascript" src="/eel.js"></script>
+    <link rel="stylesheet" href="main.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chessboard</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Simulated Annealing</h1>
+        <div>
+            <table id="chessboard"></table>
+        </div>
+        <div class="inputs">
+            <label for="temp">Initial Temperature</label>
+            <input type="text" id="temp" name="temperature" class="textbox">
+            <button onclick="simulatedAnnealing()">Run</button>
+            <button onclick="simulation()">Simulate</button>
+        </div>
+        <div class="inputs">
+            <p id="sim_times">0</p>
+        </div>
+    </div>
+    <script src = "main.js"></script>
+</body>
+</html>

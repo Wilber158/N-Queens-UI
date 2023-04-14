@@ -75,11 +75,11 @@ def debug_simulated_Annealing(initial):
         print(f"Current h: {currentH}")
     return current
 
-def simulated_Annealing(initial, temp):
-    t0, k, alpha = 10000, 0, 0.85
+def simulated_Annealing(initial, t0):
+    k, alpha = 0, 0.85
     tk = t0
     current = initial
-    for i in range(temp):
+    for i in range(100000000):
         #simulating annealing (temperature change) using Exponential multiplicative cooling
         tk = t0 * pow(alpha, k)
         k = k + 1
@@ -104,6 +104,42 @@ def simulated_Annealing(initial, temp):
             if(decision(prob)):
                 current = next
         #if true we have found the goal state
+        if currentH == 0: return current
+
+    return current
+
+@eel.expose()
+def animated_annealing(initial, t0):
+    k, alpha = 0, 0.85
+    tk = t0
+    current = initial
+    for i in range(100000000):
+        #simulating annealing (temperature change) using Exponential multiplicative cooling
+        tk = t0 * pow(alpha, k)
+        k = k + 1
+    
+        #checks if temperature is 0
+        if(tk == 0):
+            return current
+
+        #gets the number of queens being attacked of current node and next node
+        next = getNext(current)
+        nextH = numQueensAttack(next)
+        currentH = numQueensAttack(current)
+        
+        #gets the change in h for both nodes
+        e = nextH - currentH
+        #global minimum e < 0
+        if e < 0:
+            current = next
+        else:
+            #getting probabilty of exploring
+            prob = math.exp(-(e/tk))
+            if(decision(prob)):
+                current = next
+        #if true we have found the goal state
+        eel.display_board(current)()
+        time.sleep(1)
         if currentH == 0: return current
 
     return current

@@ -22,18 +22,17 @@ function clearChessboard() {
         }
     }
 }               
-
 async function simulatedAnnealing(){
     var tempString = document.getElementById("temp").value;
     var temp = parseInt(tempString);
-    const state = await eel.eight_queens(8, temp)();
+    const state = await eel.animated_annealing(8, temp)();
     clearChessboard();
     const chessPiece = "&#9819;";
     for(i = 0; i < state.length; i++){
         chessboard.rows[state[i]].cells[i].innerHTML = chessPiece;
     }
 }
-
+@eel.expose(display_Board)
 function display_Board(state){
     console.log("state:", state)
     clearChessboard();
@@ -47,7 +46,7 @@ async function simulation(){
     var tempString = document.getElementById("temp").value;
     var temp = parseInt(tempString);
     var success = 0;
-    for(i = 0; i < 5; i++){
+    for(i = 0; i < 30; i++){
         const state = await eel.eight_queens(8, temp)();
         display_Board(state);
         if(await eel.isGoalState(state)()){

@@ -1,19 +1,21 @@
 
 const chessboard = document.getElementById("chessboard");
+//create chessboard using table in html, and adding the table rows and columns
 function createChessboard() {
     for (let i = 0; i < 8; i++) {
-        const row = chessboard.insertRow();
+            const row = chessboard.insertRow();
         for (let j = 0; j < 8; j++) {
             const cell = row.insertCell();
             cell.className = (i + j) % 2 === 0 ? "blue" : "white";
         }
     }
 }
-
+//adds the queen icon to a certain (row, column)
 function addQueen(row, col) {
-    const chessPiece = "&#9819;"; // White queen: &#9813; | Black queen: &#9819;
+    const chessPiece = "&#9819;"; //Black queen: &#9819;
     chessboard.rows[row].cells[col].innerHTML = chessPiece;
 }
+
 
 function clearChessboard() {
     for (let i = 0; i < 8; i++) {
@@ -21,18 +23,21 @@ function clearChessboard() {
             chessboard.rows[i].cells[j].innerHTML = "";
         }
     }
-}               
+}
+//async function is neccessary here because it must wait for the python code to finish executing before continuing    
 async function simulatedAnnealing(){
+    clearChessboard();
     var tempString = document.getElementById("temp").value;
     var temp = parseInt(tempString);
-    const state = await eel.animated_annealing(8, temp)();
-    clearChessboard();
+    const state = await eel.animated_annealing(temp)(); //must await till python is done
     const chessPiece = "&#9819;";
     for(i = 0; i < state.length; i++){
         chessboard.rows[state[i]].cells[i].innerHTML = chessPiece;
     }
 }
-@eel.expose(display_Board)
+
+//displays chessboard given a state
+eel.expose(display_Board);//expose this javascript function to the python side
 function display_Board(state){
     console.log("state:", state)
     clearChessboard();
@@ -41,21 +46,10 @@ function display_Board(state){
         chessboard.rows[state[i]].cells[i].innerHTML = chessPiece;
     }
 }
+//
+function simulation(){
+    clearChessboard();
 
-async function simulation(){
-    var tempString = document.getElementById("temp").value;
-    var temp = parseInt(tempString);
-    var success = 0;
-    for(i = 0; i < 30; i++){
-        const state = await eel.eight_queens(8, temp)();
-        display_Board(state);
-        if(await eel.isGoalState(state)()){
-            success = success + 1;
-        }
-
-    }
-    document.getElementById("sim_times").innerHTML = success;
 }
-
 
 createChessboard();

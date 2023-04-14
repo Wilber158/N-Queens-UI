@@ -10,19 +10,22 @@
 <body>
     <div class="container">
         <h1>Simulated Annealing</h1>
-        <div>
+        <div class="board_container">
             <table id="chessboard"></table>
+            <div class="inputs">
+                <label for="temp">Initial Temperature</label>
+                <input type="text" id="temp" name="temperature" class="textbox">
+                <button onclick="clearChessboard()">Clear</button>
+                <button onclick="simulatedAnnealing()">Run</button>
+                <button onclick="simulation()">Simulate</button>
+            </div>
         </div>
-        <div class="inputs">
-            <label for="temp">Initial Temperature</label>
-            <input type="text" id="temp" name="temperature" class="textbox">
-            <button onclick="simulatedAnnealing()">Run</button>
-            <button onclick="simulation()">Simulate</button>
-        </div>
-        <div class="inputs">
-            <p id="sim_times">0</p>
+        <div class="info">
+            <p id = "current_temp">Current Temperature: </p>
+            <p id = "current_probability">Current Probability of Exploring: </p>
         </div>
     </div>
+    <script type="text/javascript" src="/eel.js"></script>
     <script src = "main.js"></script>
 </body>
 </html>

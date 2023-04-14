@@ -27,12 +27,25 @@ td {
 .white {
     background-color: #ffffff;
 }
-.container{
+
+.container {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.inputs{
+.board-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.inputs {
     margin-top: 20px;
 }
+
+.info{
+    visibility: hidden;
+}
+
+

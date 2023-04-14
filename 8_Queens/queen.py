@@ -108,11 +108,10 @@ def simulated_Annealing(initial, t0):
 
     return current
 
-@eel.expose()
-def animated_annealing(initial, t0):
+def simulated_Annealing(t0):
     k, alpha = 0, 0.85
     tk = t0
-    current = initial
+    current = initial_state()
     for i in range(100000000):
         #simulating annealing (temperature change) using Exponential multiplicative cooling
         tk = t0 * pow(alpha, k)
@@ -138,11 +137,63 @@ def animated_annealing(initial, t0):
             if(decision(prob)):
                 current = next
         #if true we have found the goal state
-        eel.display_board(current)()
-        time.sleep(1)
+        if currentH == 0: return current, 1
+
+    return current, 0
+
+@eel.expose()
+def animated_annealing(t0):
+    k, alpha = 0, 0.85
+    tk = 0
+    current = initial_state(8)
+    for i in range(10000000000000):
+        #simulating annealing (temperature change) using Exponential multiplicative cooling
+        tk = t0 * pow(alpha, k)
+        k = k + 1
+    
+        #checks if temperature is 0
+        if(tk == 0):
+            return current
+
+        #gets the number of queens being attacked of current node and next node
+        next = getNext(current)
+        nextH = numQueensAttack(next)
+        currentH = numQueensAttack(current)
+        
+        #gets the change in h for both nodes
+        e = nextH - currentH
+        #global minimum e < 0
+        if e < 0:
+            current = next
+        else:
+            #getting probabilty of exploring
+            prob = math.exp(-(e/tk))
+            if(decision(prob)):
+                current = next
+        #if true we have found the goal state
+        eel.display_Board(current)
+        eel.sleep(.1)
         if currentH == 0: return current
 
     return current
+
+
+def simulate(initial, temp, runs):
+    pass
+
+
+def simulate(temp, runs):
+    successful_runs = 0
+    for i in range(runs):
+        goalState, success = simulated_Annealing(temp)
+        eel.display_Board(goalState)
+        eel.sleep(.1)
+        if success == 1:
+            successful_runs += 1
+    return successful_runs
+
+
+
 
 @eel.expose
 def eight_queens(n, temp):

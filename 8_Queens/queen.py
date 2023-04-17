@@ -172,7 +172,7 @@ def animated_annealing(t0):
                 current = next
         #if true we have found the goal state
         eel.display_Board(current)
-        eel.sleep(.1)
+        eel.sleep(.01)
         if currentH == 0: return current
 
     return current

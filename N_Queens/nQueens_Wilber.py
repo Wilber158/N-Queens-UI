@@ -18,10 +18,11 @@ def queenAttack(x_1, y_1, x_2, y_2):
     return False
 
 def initial_state(n):
-    arr = []
-    for i in range(n):
-        arr.append(random.randint(0, n))
-    return arr
+    row = random.randint(0, n-1)
+    column = random.randint(0, n-1)
+    board = [None] * n
+    board[column] = row
+    return board, column
 
 def numQueensAttack(arr):
     #finds the number of queens that are attacking each other
@@ -116,9 +117,11 @@ def least_constrained_values(a, column, vars):
 
 
 def backtracking_search(N):
-    board = [None] * N
-    unassigned = []
-    for i in range(N): unassigned.append(i)
+    board, startingC = initial_state(N)
+    unassigned = [startingC]
+    for i in range(N):
+        if i == startingC: continue 
+        unassigned.append(i)
     return recursive_backtracking(board, unassigned, N)
 
 def recursive_backtracking(assignment, unassigned, N):

@@ -143,8 +143,10 @@ def recursive_backtracking(assignment, unassigned, N):
 
 
 def main():
-    result = backtracking_search(8)
+    result = backtracking_search(50)
+    print("Running....")
     print(f"Result array: {result}") 
+    print(f"Num Queens attacking {numQueensAttack(result)}")
     
 
 main()

@@ -20,6 +20,10 @@ td {
     font-size: 32px;
 }
 
+#title{
+    padding-bottom: 10px;
+}
+
 .blue {
     background-color: #0019f9;
 }
@@ -48,4 +52,8 @@ td {
     visibility: hidden;
 }
 
+.cell{
+    width: 50px;
+    height: 50px;
+}
 

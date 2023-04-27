@@ -1,4 +1,5 @@
 import random
+import eel
 
 class Position: #class object used for the LCV implementation
     def __init__(self, qr, qc, value):
@@ -38,6 +39,7 @@ def numQueensAttack(arr):
             if queenAttack(qR, qC, oR, oC):
                h = h + 1
     return h
+
 
 def is_Complete(assignment):
     #check if every variable in assignment has a value
@@ -115,7 +117,7 @@ def least_constrained_values(a, column, vars):
 
     return sorted_domain
 
-
+@eel.expose
 def backtracking_search(N):
     board, startingC = initial_state(N)
     unassigned = [startingC]
@@ -123,7 +125,7 @@ def backtracking_search(N):
         if i == startingC: continue 
         unassigned.append(i)
     return recursive_backtracking(board, unassigned, N)
-
+@eel.expose
 def recursive_backtracking(assignment, unassigned, N):
     if is_Complete(assignment):
         return assignment
@@ -138,18 +140,58 @@ def recursive_backtracking(assignment, unassigned, N):
         assignment[column] = None
     return False
 
-        
-        
+def get_num_attacking(c, column):
+    current = c.copy()
+    current[column] = None
+    return numQueensAttack(c) - numQueensAttack(current)
+
+def get_conflicted_column(current):
+    n = len(current)
+    conflicted = []
+    for i in range(n):
+        if get_num_attacking(current, i) > 0:
+            conflicted.append(i)
+    column = random.randint(0, len(conflicted) - 1)
+    return conflicted[column]
+
+def get_least_conflicting_queen(current, column):
+    best = current.copy()
+    c = current.copy()
+    n = len(current)
+    best[column] = None
+    least = numQueensAttack(current)
+    least_row = None
+    for i in range(n):
+        c[column] = i
+        value = numQueensAttack(c) - numQueensAttack(best)
+        if value < least:
+            least = value
+            least_index = i
+    return least_index
+    
+def initial_state2(n):
+    arr = []
+    for i in range(n):
+        arr.append(random.randint(0, n-1))
+    return arr
+
+
+def min_conflicts(N):
+    max_steps = 30000
+    current = initial_state2(N)
+    for i in range(max_steps):
+        if numQueensAttack(current) == 0: return current
+        conflicted_column = get_conflicted_column(current)
+        var = get_least_conflicting_queen(current, conflicted_column)
+        current[conflicted_column] = var
+    return False
+
 
 
 def main():
-    result = backtracking_search(50)
+    result = min_conflicts(40)
     print("Running....")
-    print(f"Result array: {result}") 
-    print(f"Num Queens attacking {numQueensAttack(result)}")
-    
-
-main()
+    print(f"Result array: {result}")    
 
 
 

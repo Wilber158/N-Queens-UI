@@ -13,11 +13,12 @@
         <div class="board_container">
             <table id="chessboard"></table>
             <div class="inputs">
-                <label for="temp">Initial Temperature</label>
-                <input type="text" id="temp" name="temperature" class="textbox">
+            </div>
+            <div class = "n_input">
+                <label for="temp">N Queen: </label>
+                <input type="text" id="n" name="n_input" class="textbox">
+                <button onclick="backtracking()">Run</button>
                 <button onclick="clearChessboard()">Clear</button>
-                <button onclick="simulatedAnnealing()">Run</button>
-                <button onclick="simulation()">Simulate</button>
             </div>
         </div>
         <div class="info">
@@ -27,6 +28,6 @@
         
     </div>
     <script type="text/javascript" src="/eel.js"></script>
-    <script src = "main.js"></script>
+    <script src = "backtracking.js"></script>
 </body>
 </html>

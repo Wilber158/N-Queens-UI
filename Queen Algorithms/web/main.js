@@ -10,6 +10,17 @@ function createChessboard() {
         }
     }
 }
+
+function createNChessboard(n){
+    for (let i = 0; i < n; i++) {
+            const row = chessboard.insertRow();
+        for (let j = 0; j < n; j++) {
+            const cell = row.insertCell();
+            cell.className = (i + j) % 2 === 0 ? "blue" : "white";
+        }
+    }
+
+}
 //adds the queen icon to a certain (row, column)
 function addQueen(row, col) {
     const chessPiece = "&#9819;"; //Black queen: &#9819;
@@ -34,6 +45,15 @@ async function simulatedAnnealing(){
     for(i = 0; i < state.length; i++){
         chessboard.rows[state[i]].cells[i].innerHTML = chessPiece;
     }
+}
+
+async function backtracking(){
+    clearChessboard();
+    var tempString = document.getElementById("temp").value;
+    var n = parseInt(tempString);
+    createNChessboard(n);
+    const state = await eel.backtracking_search(n)(); //must await till python is done
+    display_Board(state)
 }
 
 //displays chessboard given a state

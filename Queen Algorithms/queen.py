@@ -75,7 +75,7 @@ def debug_simulated_Annealing(initial):
         print(f"Current h: {currentH}")
     return current
 
-def simulated_Annealing(initial, t0):
+def simulated_Annealing2(initial, t0):
     k, alpha = 0, 0.85
     tk = t0
     current = initial
@@ -178,9 +178,6 @@ def animated_annealing(t0):
     return current
 
 
-def simulate(initial, temp, runs):
-    pass
-
 
 def simulate(temp, runs):
     successful_runs = 0
@@ -201,5 +198,4 @@ def eight_queens(n, temp):
     goal_state = simulated_Annealing(state, temp)
     return goal_state
         
-    
 

@@ -111,7 +111,7 @@ def simulated_Annealing2(initial, t0):
 def simulated_Annealing(t0):
     k, alpha = 0, 0.85
     tk = t0
-    current = initial_state()
+    current = initial_state(8)
     for i in range(100000000):
         #simulating annealing (temperature change) using Exponential multiplicative cooling
         tk = t0 * pow(alpha, k)
@@ -178,7 +178,6 @@ def animated_annealing(t0):
     return current
 
 
-
 def simulate(temp, runs):
     successful_runs = 0
     for i in range(runs):
@@ -189,7 +188,27 @@ def simulate(temp, runs):
             successful_runs += 1
     return successful_runs
 
+class success:
+    def __init__(self, temp, success):
+        self.temp = temp
+        self.success = success
 
+
+def get_success_rate():
+    arr = []
+    for i in range(100, 1000, 100):
+        state, s = simulated_Annealing(i)
+        print(state)
+        if s == 0:
+            obj = success(i, 0)
+            arr.append(obj)
+        else:
+            obj = success(i, 1)
+            arr.append(obj)
+
+    for i in arr:
+        print(f"Temp: {i.temp} Success: {i.success}")
+    return arr
 
 
 @eel.expose
@@ -197,5 +216,11 @@ def eight_queens(n, temp):
     state = initial_state(n)
     goal_state = simulated_Annealing(state, temp)
     return goal_state
+
+def main():
+    get_success_rate()
+
+if __name__ == "__main___":
+    main()
         
 

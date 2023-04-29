@@ -2,7 +2,10 @@ import random
 import math
 import time
 import eel
+import json
 
+
+#function that checks whether two queens are attacking each other
 def queenAttack(x_1, y_1, x_2, y_2):
     if x_1 == x_2:
         return True
@@ -12,6 +15,7 @@ def queenAttack(x_1, y_1, x_2, y_2):
         return True
     return False
 
+#function that checks given a state represented by an array, the amount of queens who are attacking each other
 def numQueensAttack(arr):
     #finds the number of queens that are attacking each other
     h = 0
@@ -24,12 +28,14 @@ def numQueensAttack(arr):
             if queenAttack(qR, qC, oR, oC):
                h = h + 1
     return h
+
 @eel.expose
 def isGoalState(arr):
     if numQueensAttack(arr) == 0:
         return True
     return False
 
+#generates an initial random full state, given n 
 def initial_state(n):
     arr = []
     for i in range(n):
@@ -37,6 +43,7 @@ def initial_state(n):
     return arr
 
 
+#
 def getNext(arr):
     #makes a random move on a certain column given a state
     nextArr = arr.copy()
@@ -46,9 +53,11 @@ def getNext(arr):
     nextArr[nextR] = nextC
     return nextArr
 
+#function to find the probabilities of exploring
 def decision(probability):
     return random.random() < probability
 
+#debug function used to visualize the process of the simulating annealing algorithm
 def debug_simulated_Annealing(initial):
     t0, k, alpha = 10000, 0, 0.85
     tk = t0
@@ -75,6 +84,7 @@ def debug_simulated_Annealing(initial):
         print(f"Current h: {currentH}")
     return current
 
+#a simulating annealing algorithm that takes an initial state AND starting temperature
 def simulated_Annealing2(initial, t0):
     k, alpha = 0, 0.85
     tk = t0
@@ -108,6 +118,7 @@ def simulated_Annealing2(initial, t0):
 
     return current
 
+#simulated annealing function that takes initial temperature
 def simulated_Annealing(t0):
     k, alpha = 0, 0.85
     tk = t0
@@ -141,11 +152,17 @@ def simulated_Annealing(t0):
 
     return current, 0
 
-@eel.expose()
-def animated_annealing(t0):
+
+#function that is used to display the board in the GUI used
+@eel.expose()#exposing function to the javascript side
+def animated_annealing(t0, initial=None):
     k, alpha = 0, 0.85
     tk = 0
-    current = initial_state(8)
+    if initial:
+        current = initial
+    else:
+        current = initial_state(8)
+
     for i in range(10000000000000):
         #simulating annealing (temperature change) using Exponential multiplicative cooling
         tk = t0 * pow(alpha, k)
@@ -170,9 +187,9 @@ def animated_annealing(t0):
             prob = math.exp(-(e/tk))
             if(decision(prob)):
                 current = next
+        eel.display_Board(current)#calling 
+        eel.sleep(.001)
         #if true we have found the goal state
-        eel.display_Board(current)
-        eel.sleep(.01)
         if currentH == 0: return current
 
     return current
@@ -188,6 +205,7 @@ def simulate(temp, runs):
             successful_runs += 1
     return successful_runs
 
+#below we will use the class objects to calculate success rate based on certain temperatures
 class success:
     def __init__(self, temp, success):
         self.temp = temp

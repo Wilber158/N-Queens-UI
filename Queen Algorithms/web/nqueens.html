@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap" rel="stylesheet">
     <script type="text/javascript" src="/eel.js"></script>
-    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="backtracking.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chessboard</title>
 </head>
 <body>
     <div class="container">
-        <h1>N Queens</h1>
+        <h1 id = "title-container">N Queens</h1>
         <div class="board_container">
             <table id="chessboard"></table>
             <div class="inputs">
@@ -21,10 +22,14 @@
                 <button onclick="clearChessboard()">Clear</button>
             </div>
         </div>
-        <div class="info">
-            <p id = "current_temp">Current Temperature: </p>
-            <p id = "current_probability">Current Probability of Exploring: </p>
+        <div class="scrollable">
+            <div class="info">
+                <p id="is_successful">Successful!</p>
+                <p id="time">Elapsed time: </p>
+                <p id="num_attacking">Number of Queens attacking: </p>
+            </div>
         </div>
+        
         
     </div>
     <script type="text/javascript" src="/eel.js"></script>

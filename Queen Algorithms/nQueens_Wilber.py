@@ -1,5 +1,6 @@
 import random
 import eel
+import time
 
 class Position: #class object used for the LCV implementation
     def __init__(self, qr, qc, value):
@@ -9,6 +10,7 @@ class Position: #class object used for the LCV implementation
     def __str__(self):
         print(f"row = {self.row} \n column = {self.column} \n available spaces {self.value}")
 
+#function to check whether two queens are attacking each other
 def queenAttack(x_1, y_1, x_2, y_2):
     if x_1 == x_2:
         return True
@@ -17,7 +19,7 @@ def queenAttack(x_1, y_1, x_2, y_2):
     elif abs(x_1 - x_2) == abs(y_1 - y_2):
         return True
     return False
-
+#generates an initial state with one queen placement
 def initial_state(n):
     row = random.randint(0, n-1)
     column = random.randint(0, n-1)
@@ -25,6 +27,7 @@ def initial_state(n):
     board[column] = row
     return board, column
 
+@eel.expose
 def numQueensAttack(arr):
     #finds the number of queens that are attacking each other
     h = 0
@@ -80,23 +83,21 @@ def get_legal_placements(assignment, row, column, vars):
 
     return count
 
-
-
 def most_contrained_value(assignment, vars, n):
     values = {}
     for i in vars:
         values.update({i: get_legal_moves(assignment, i, n)}) #vars[i] is the unassigned index we are trying to get the legal positions for
     
-    max = -1
+    max = float('inf')
     max_index = -1
     for key, value in values.items():
-        if value >= max:
+        if value <  max:
             max = value
             max_index = key
     
     return max_index
 
-        
+#heuristic function for least contrained values, will return the queen placement that leaves the most available queen spaces in the remaining column
 def least_constrained_values(a, column, vars):
     assignment = a.copy()
     domain = [] #list to hold the LCV queen positions
@@ -119,12 +120,13 @@ def least_constrained_values(a, column, vars):
 
 @eel.expose
 def backtracking_search(N):
+    start = time.time()
     board, startingC = initial_state(N)
     unassigned = [startingC]
     for i in range(N):
         if i == startingC: continue 
         unassigned.append(i)
-    return recursive_backtracking(board, unassigned, N)
+    return recursive_backtracking(board, unassigned, N), (time.time() - start)
 @eel.expose
 def recursive_backtracking(assignment, unassigned, N):
     if is_Complete(assignment):
@@ -145,14 +147,16 @@ def get_num_attacking(c, column):
     current[column] = None
     return numQueensAttack(c) - numQueensAttack(current)
 
-def get_conflicted_column(current):
+def get_most_conflicted_column(current):
     n = len(current)
-    conflicted = []
+    most_conflicts = -1
+    most_conflicted_column = -1
     for i in range(n):
-        if get_num_attacking(current, i) > 0:
-            conflicted.append(i)
-    column = random.randint(0, len(conflicted) - 1)
-    return conflicted[column]
+        conflicts = get_num_attacking(current, i)
+        if conflicts > most_conflicts:
+            most_conflicts = conflicts
+            most_conflicted_column = i
+    return most_conflicted_column
 
 def get_least_conflicting_queen(current, column):
     best = current.copy()
@@ -160,7 +164,7 @@ def get_least_conflicting_queen(current, column):
     n = len(current)
     best[column] = None
     least = numQueensAttack(current)
-    least_row = None
+    least_index = None
     for i in range(n):
         c[column] = i
         value = numQueensAttack(c) - numQueensAttack(best)
@@ -176,22 +180,16 @@ def initial_state2(n):
     return arr
 
 
-def min_conflicts(N):
-    max_steps = 30000
+def min_conflicts(N, max_restarts = 10):
+    max_steps = 20000
     current = initial_state2(N)
-    for i in range(max_steps):
-        if numQueensAttack(current) == 0: return current
-        conflicted_column = get_conflicted_column(current)
-        var = get_least_conflicting_queen(current, conflicted_column)
-        current[conflicted_column] = var
+    restarts = 0
+    while restarts <= max_restarts:
+        for i in range(max_steps):
+            if numQueensAttack(current) == 0: return current
+            conflicted_column = get_most_conflicted_column(current)
+            var = get_least_conflicting_queen(current, conflicted_column)
+            current[conflicted_column] = var
+        restarts+= 1
     return False
-
-
-
-def main():
-    result = min_conflicts(40)
-    print("Running....")
-    print(f"Result array: {result}")    
-
-
 

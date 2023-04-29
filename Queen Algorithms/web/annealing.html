@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap" rel="stylesheet">
     <script type="text/javascript" src="/eel.js"></script>
-    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="annealing.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chessboard</title>
@@ -19,10 +20,15 @@
                 <button onclick="simulatedAnnealing()">Run</button>
                 <button onclick="simulation()">Simulate</button>
             </div>
+            <div class = "input_state">
+                <label for="initial_state">Initial State</label>
+                <input type="text" id="initial_state" name="initial_state" class="textbox" placeholder="e.g., 0,1,2,3,4,5,6,7">
+                <button onclick="setInitialState()">Set</button>
+            </div>
         </div>
-        <div class="info">
-            <p id = "current_temp">Current Temperature: </p>
-            <p id = "current_probability">Current Probability of Exploring: </p>
+        <div class="results">
+            <p id = "is_successful"></p>
+            <p id = "num_attacking"></p>
         </div>
     </div>
     <script type="text/javascript" src="/eel.js"></script>

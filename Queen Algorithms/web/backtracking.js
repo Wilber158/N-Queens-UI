@@ -26,20 +26,48 @@ function createNChessboard(n) {
     }
 }
 
+function setQueenSize(cellSize) {
+    // Set queen size based on cellSize
+    const queenSize = Math.floor(cellSize * 0.8); // Adjust the scaling factor as needed
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .queen {
+            font-size: ${queenSize}px;
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+
+
 //displays chessboard given a state
 eel.expose(display_Board);//expose this javascript function to the python side
-function display_Board(state){
+async function display_Board(state, time){
     console.log("state:", state)
     clearChessboard();
-    const chessPiece = "&#9819;";
-    for(i = 0; i < state.length; i++){
+    const cellSize = chessboard.rows[0].cells[0].clientWidth;
+    const fontSize = Math.floor(cellSize * 0.8); // 80% of the cell size
+    const chessPiece = `&#9819;`;
+    for (i = 0; i < state.length; i++){
         chessboard.rows[state[i]].cells[i].innerHTML = chessPiece;
+        chessboard.rows[state[i]].cells[i].style.fontSize = `${fontSize}px`;
     }
+    const num_queens_attacking = await eel.numQueensAttack(state)();
+    document.getElementById("num_attacking").innerText = "Number of Queens attacking: " + num_queens_attacking
+    document.getElementById("time").innerText = "Elapsed Time: " + time
+    if(num_queens_attacking == 0){
+        document.getElementById("is_successful").innerText = "Success!"
+    }
+    else{
+        document.getElementById("is_successful").innerText = "Failure (hopefully we aren't presenting when this is shown)"
+    }
+    document.getElementsByClassName("info")[0].style.visibility = "visible";
+
 }
 
 //adds the queen icon to a certain (row, column)
 function addQueen(row, col) {
-    const chessPiece = "&#9819;"; //Black queen: &#9819;
+    const chessPiece = "<span class='queen'>&#9819;</span>"; //Black queen: &#9819;
     chessboard.rows[row].cells[col].innerHTML = chessPiece;
 }
 
@@ -55,6 +83,8 @@ function clearChessboard() {
             chessboard.rows[i].cells[j].innerHTML = "";
         }
     }
+    document.getElementsByClassName("info")[0].style.visibility = "hidden";
+
 }
 
 function removeChessboard(){
@@ -67,26 +97,14 @@ function removeChessboard(){
     }
 }
 
-//async function is neccessary here because it must wait for the python code to finish executing before continuing    
-async function simulatedAnnealing(){
-    clearChessboard();
-    var tempString = document.getElementById("temp").value;
-    var temp = parseInt(tempString);
-    const state = await eel.animated_annealing(temp)(); //must await till python is done
-    const chessPiece = "&#9819;";
-    for(i = 0; i < state.length; i++){
-        chessboard.rows[state[i]].cells[i].innerHTML = chessPiece;
-    }
-}
-
 async function backtracking(){
     clearChessboard();
     removeChessboard();
     var tempString = document.getElementById("n").value;
     var n = parseInt(tempString);
     createNChessboard(n);
-    const state = await eel.backtracking_search(n)(); //must await till python is done
-    display_Board(state)
+    const [state, time] = await eel.backtracking_search(n)(); //must await till python is done
+    display_Board(state, time)
 }
 
 //

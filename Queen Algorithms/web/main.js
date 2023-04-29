@@ -1,4 +1,3 @@
-
 const chessboard = document.getElementById("chessboard");
 //create chessboard using table in html, and adding the table rows and columns
 function createChessboard() {
@@ -34,26 +33,38 @@ function clearChessboard() {
             chessboard.rows[i].cells[j].innerHTML = "";
         }
     }
+
+    document.getElementsByClassName("results")[0].style.visibility = "hidden";
+
 }
 //async function is neccessary here because it must wait for the python code to finish executing before continuing    
 async function simulatedAnnealing(){
-    clearChessboard();
+     // Get the current state of the board
+    clearChessboard()
+    user_state = setInitialState()
     var tempString = document.getElementById("temp").value;
     var temp = parseInt(tempString);
-    const state = await eel.animated_annealing(temp)(); //must await till python is done
+    let statePromise;
+    if(user_state == false){
+        statePromise = await eel.animated_annealing(temp)(); //must await till python is done
+    }
+    else{
+        statePromise = await eel.animated_annealing(temp, user_state)();
+    }
+    const state = await statePromise
     const chessPiece = "&#9819;";
     for(i = 0; i < state.length; i++){
         chessboard.rows[state[i]].cells[i].innerHTML = chessPiece;
     }
-}
-
-async function backtracking(){
-    clearChessboard();
-    var tempString = document.getElementById("temp").value;
-    var n = parseInt(tempString);
-    createNChessboard(n);
-    const state = await eel.backtracking_search(n)(); //must await till python is done
-    display_Board(state)
+    const num_queens_attacking = await eel.numQueensAttack(state)();
+    if(num_queens_attacking == 0){
+        document.getElementById("is_successful").innerText = "Successful!";
+    }
+    else{
+        document.getElementById("is_successful").innerText = "Fail -_-";
+    }
+    document.getElementById("num_attacking").innerText = "Number of Queens attacking: " + num_queens_attacking;
+    document.getElementsByClassName("results")[0].style.visibility = "visible";
 }
 
 //displays chessboard given a state
@@ -70,6 +81,25 @@ function display_Board(state){
 function simulation(){
     clearChessboard();
 
+}
+
+function setInitialState() {
+    const initialStateString = document.getElementById("initial_state").value;
+    if(initialStateString == ""){
+        console.log("empty initial")
+        return false
+    }
+    const initialState = initialStateString.split(",").map(Number);
+    if (initialState.length === 8 && initialState.every(n => n >= 0 && n <= 7)) {
+        clearChessboard();
+        for (let i = 0; i < initialState.length; i++) {
+            addQueen(initialState[i], i);
+        }
+        return initialState
+    } else {
+        alert("Invalid initial state. Please enter a comma-separated list of 8 integers between 0 and 7.");
+    }
+    return false
 }
 
 createChessboard();

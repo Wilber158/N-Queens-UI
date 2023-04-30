@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <script type="text/javascript" src="/eel.js"></script>
+    <link rel="stylesheet" href="backtracking.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chessboard</title>
+</head>
+<body>
+    <div class="container">
+        <h1 id = "title-container">N Queens</h1>
+        <div class="board_container">
+            <table id="chessboard"></table>
+            <div class="inputs">
+            </div>
+            <div class = "n_input">
+                <label for="temp">N Queen: </label>
+                <input type="text" id="n" name="n_input" class="textbox">
+                <button onclick="backtracking()">Run</button>
+                <button onclick="clearChessboard()">Clear</button>
+            </div>
+        </div>
+        <div class="scrollable">
+            <div class="info">
+                <p id="is_successful">Successful!</p>
+                <p id="time">Elapsed time: </p>
+                <p id="num_attacking">Number of Queens attacking: </p>
+            </div>
+        </div>
+        
+        
+    </div>
+    <script type="text/javascript" src="/eel.js"></script>
+    <script src = "backtracking.js"></script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+body {
+    background-color: #1c1c1c;
+    font-family: 'Press Start 2P', cursive;
+}
+  
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+  
+h1{
+    font-size: 2rem;
+    color: #f7df1e;
+    margin-bottom: 1rem;
+    padding-bottom: 10px;
+}
+  
+.buttons{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+  
+button{
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border: 2px solid #f7df1e;
+    background-color: transparent;
+    color: #f7df1e;
+    cursor: pointer;
+}
+  
+button:hover {
+    background-color: #f7df1e;
+    color: #1c1c1c;
+}
+  

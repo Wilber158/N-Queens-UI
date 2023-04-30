@@ -1,0 +1,4 @@
+([('start',
+   '/Users/wilbercortez/Documents/GitHub/Artificial-Inteligence-Final-Project/Queen '
+   'Algorithms/dist/start',
+   'EXECUTABLE')],)
